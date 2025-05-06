@@ -1,37 +1,27 @@
-const fs = require('fs');
-const { readMetadata } = require('../services/tagReader');
-const { writeMetadata } = require('../services/tagWriter');
+const scanner = require('../services/scanner');
+const tagReader = require('../services/tagReader');
+const tagWriter = require('../services/tagWriter');
+const aiHelper = require('../services/aiHelper');
 
-// Read metadata
-exports.readMetadata = async (req, res) => {
-    const { filePath } = req.body;
+exports.updateMetadata = async (req, res) => {
+    const { albumPath } = req.body;
 
-    if (!filePath || !fs.existsSync(filePath)) {
-        return res.status(400).json({ error: 'Invalid or missing filePath' });
+    if (!albumPath) {
+        return res.status(400).json({ error: 'Missing albumPath' });
     }
 
     try {
-        const metadata = await readMetadata(filePath);
-        return res.json({ metadata });
-    } catch (error) {
-        console.error('Error reading metadata:', error);
-        return res.status(500).json({ error: 'Failed to read metadata' });
-    }
-};
+        const files = await scanner.getAudioFilesRecursively(albumPath);
 
-// Write metadata
-exports.writeMetadata = async (req, res) => {
-    const { filePath, tags } = req.body;
+        for (const file of files) {
+            const existingTags = await tagReader.readMetadata(file);
+            const correctedTags = await aiHelper.getCorrectMetadata(existingTags, file);
+            await tagWriter.writeMetadata(file, correctedTags);
+        }
 
-    if (!filePath || !fs.existsSync(filePath)) {
-        return res.status(400).json({ error: 'Invalid or missing filePath' });
-    }
-
-    try {
-        await writeMetadata(filePath, tags);
-        return res.json({ message: 'Metadata written successfully' });
-    } catch (error) {
-        console.error('Error writing metadata:', error.message);
-        return res.status(500).json({ error: 'Failed to write metadata' });
+        res.json({ message: 'Metadata updated for all files.' });
+    } catch (err) {
+        console.error('Error updating metadata:', err);
+        res.status(500).json({ error: 'Failed to update metadata' });
     }
 };

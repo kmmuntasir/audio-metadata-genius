@@ -1,13 +1,12 @@
 const express = require('express');
 const cors = require('cors');
-const fileRoutes = require('./routes/files');
-const metadataRoutes = require('./routes/metadata');
-
 const app = express();
-app.use(cors());
-app.use(express.json());
+const filesRouter = require('./routes/files');
+const metadataRouter = require('./routes/metadata');
 
-app.use('/api/files', fileRoutes);
-app.use('/api/metadata', metadataRoutes);
+app.use(express.json());
+app.use(cors());
+app.use('/api/files', filesRouter);
+app.use('/api/metadata', metadataRouter);
 
 module.exports = app;

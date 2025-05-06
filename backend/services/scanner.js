@@ -1,27 +1,25 @@
-const fs = require('fs');
+const fs = require('fs').promises;
 const path = require('path');
 
-const supportedExtensions = ['.mp3', '.flac', '.wav', '.m4a'];
+const supportedExtensions = ['.mp3', '.flac', '.wav', '.m4a', '.wma'];
 
-function getAudioFilesRecursively(dir) {
-    const results = [];
+async function getAudioFilesRecursively(dir) {
+    let results = [];
+    const list = await fs.readdir(dir, { withFileTypes: true });
 
-    function scan(dirPath) {
-        const list = fs.readdirSync(dirPath);
-        list.forEach(file => {
-            const fullPath = path.join(dirPath, file);
-            const stat = fs.statSync(fullPath);
-
-            if (stat && stat.isDirectory()) {
-                scan(fullPath);
-            } else if (supportedExtensions.includes(path.extname(fullPath).toLowerCase())) {
-                results.push(fullPath);
-            }
-        });
+    for (const item of list) {
+        const fullPath = path.join(dir, item.name);
+        if (item.isDirectory()) {
+            const subFiles = await getAudioFilesRecursively(fullPath);
+            results = results.concat(subFiles);
+        } else if (supportedExtensions.includes(path.extname(item.name).toLowerCase())) {
+            results.push(fullPath);
+        }
     }
 
-    scan(dir);
     return results;
 }
 
-module.exports = { getAudioFilesRecursively };
+module.exports = {
+    getAudioFilesRecursively
+};

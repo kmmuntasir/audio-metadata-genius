@@ -1,12 +1,17 @@
 const scanner = require('../services/scanner');
 
 exports.scanDirectory = async (req, res) => {
-    const { path } = req.body;
+    const { albumPath } = req.body;
+
+    if (!albumPath) {
+        return res.status(400).json({ error: 'Missing albumPath' });
+    }
+
     try {
-        const files = await scanner.getAudioFilesRecursively(path);
-        res.json({ files });
-    } catch (error) {
-        console.error('Scan error:', error);
-        res.status(500).json({ error: 'Failed to scan directory.' });
+        const audioFiles = await scanner.getAudioFilesRecursively(albumPath);
+        res.json({ files: audioFiles });
+    } catch (err) {
+        console.error('Error scanning directory:', err);
+        res.status(500).json({ error: 'Failed to scan directory' });
     }
 };
