@@ -1,5 +1,6 @@
 const getAudioFilesRecursively = require('./services/scanner').getAudioFilesRecursively;
 const tagReader = require('./services/tagReader').readMetadata;
+const getMusicDetails = require('./helpers/groqAiHelper').getMusicDetails;
 
 const readTags = async (filePath) => {
     try {
@@ -35,6 +36,9 @@ const readTagsForFiles = async (files) => {
         // console.log('Tags results:', JSON.parse(JSON.stringify(tagsResults)));
         console.log("Second File", tagsResults[0]);
         // console.log("Second File Comment", tagsResults[1].tags.comment);
+
+        const enrichedMusicDetails = await getMusicDetails(tagsResults[0].tags);
+        console.log('Enriched Music Details:', enrichedMusicDetails);
     } catch (error) {
         console.error('Error scanning directory:', error);
     }

@@ -34,7 +34,7 @@ async function readMetadata(filePath) {
             },
             duration: format.duration != null ? Number(format.duration.toFixed(3)) : null,
             encodedBy: safe(common.encodedby, ''),
-            // file: path.resolve(filePath),
+            file: path.resolve(filePath),
             genres: genres.filter(Boolean),
             labels: labels.filter(Boolean),
             numberOfChannels: safe(format.numberOfChannels, null),
