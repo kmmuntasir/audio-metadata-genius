@@ -6,6 +6,7 @@ services:
     image: node:22-bullseye-slim
     volumes:
       - ./backend:/app
+      - "${MUSIC_DIR}:/app/music"
     ports:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
     working_dir: /app
