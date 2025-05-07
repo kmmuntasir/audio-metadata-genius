@@ -32,8 +32,8 @@ const readTagsForFiles = async (files) => {
         const audioFiles = await getAudioFilesRecursively(dir);
         console.log('Found audio files:', audioFiles);
         const tagsResults = await readTagsForFiles(audioFiles);
-        console.log('Tags results:', JSON.parse(JSON.stringify(tagsResults)));
-        console.log("Second File", tagsResults[1]);
+        // console.log('Tags results:', JSON.parse(JSON.stringify(tagsResults)));
+        console.log("Second File", tagsResults[0]);
         // console.log("Second File Comment", tagsResults[1].tags.comment);
     } catch (error) {
         console.error('Error scanning directory:', error);
