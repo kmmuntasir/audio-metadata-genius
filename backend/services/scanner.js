@@ -3,23 +3,41 @@ const path = require('path');
 
 const supportedExtensions = ['.mp3', '.flac', '.wav', '.m4a', '.wma'];
 
-async function getAudioFilesRecursively(dir) {
-    let results = [];
-    const list = await fs.readdir(dir, { withFileTypes: true });
+async function findLeafAudioFolders(dir) {
+    const folderContents = {};
 
-    for (const item of list) {
-        const fullPath = path.join(dir, item.name);
-        if (item.isDirectory()) {
-            const subFiles = await getAudioFilesRecursively(fullPath);
-            results = results.concat(subFiles);
-        } else if (supportedExtensions.includes(path.extname(item.name).toLowerCase())) {
-            results.push(fullPath);
+    async function scan(currentDir) {
+        const items = await fs.readdir(currentDir, { withFileTypes: true });
+        const audioFilesInCurrent = [];
+        let hasSubdirectoriesWithAudio = false;
+
+        for (const item of items) {
+            const fullPath = path.join(currentDir, item.name);
+            if (item.isDirectory()) {
+                const subFolderHasAudio = await scan(fullPath);
+                if (subFolderHasAudio) {
+                    hasSubdirectoriesWithAudio = true;
+                }
+            } else if (supportedExtensions.includes(path.extname(item.name).toLowerCase())) {
+                audioFilesInCurrent.push(fullPath);
+            }
         }
+
+        if (audioFilesInCurrent.length > 0) {
+            if (!folderContents[currentDir]) {
+                folderContents[currentDir] = [];
+            }
+            folderContents[currentDir] = folderContents[currentDir].concat(audioFilesInCurrent);
+            return true;
+        }
+
+        return hasSubdirectoriesWithAudio;
     }
 
-    return results;
+    await scan(dir);
+    return Object.values(folderContents);
 }
 
 module.exports = {
-    getAudioFilesRecursively
+    findLeafAudioFolders
 };

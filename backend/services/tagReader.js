@@ -18,33 +18,27 @@ async function readMetadata(filePath) {
         const composers = safe(common.composer, []);
         const genres = safe(common.genre, []);
         const labels = safe(common.label, []);
-        const comments = safe(common.comment, []);
+
+        let pictureBase64 = null;
+        if (common.picture && common.picture.length > 0) {
+            pictureBase64 = Buffer.from(common.picture[0].data).toString('base64');
+        }
 
         // Return clean, predictable object (alphabetically sorted)
         return {
             album: safe(common.album, ''),
             albumArtist: safe(common.albumartist, ''),
             artists: artists.filter(Boolean),
-            bitrate: safe(format.bitrate, null),
-            comments: comments.filter(Boolean),
             composers: composers.filter(Boolean),
-            disk: {
-                no: safe(common.disk?.no, null),
-                of: safe(common.disk?.of, null)
-            },
-            duration: format.duration != null ? Number(format.duration.toFixed(3)) : null,
-            encodedBy: safe(common.encodedby, ''),
-            file: path.resolve(filePath),
+            description: '',
+            diskNumber: safe(common.disk?.no, null),
             genres: genres.filter(Boolean),
             labels: labels.filter(Boolean),
-            numberOfChannels: safe(format.numberOfChannels, null),
-            picture: safe(common.picture, []),
-            sampleRate: safe(format.sampleRate, null),
+            picture: pictureBase64,
             title: safe(common.title, ''),
-            track: {
-                no: safe(common.track?.no, null),
-                of: safe(common.track?.of, null)
-            },
+            totalDisks: safe(common.disk?.of, null),
+            totalTracks: safe(common.track?.of, null),
+            trackNumber: safe(common.track?.no, null),
             year: safe(common.year, null)
         };
 
