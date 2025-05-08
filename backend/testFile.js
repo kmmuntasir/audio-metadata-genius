@@ -1,3 +1,4 @@
+const connectDB = require("./db/connection");
 const findLeafAudioFolders = require('./services/scanner').findLeafAudioFolders;
 const tagReader = require('./services/tagReader').readMetadata;
 const getAlbumDetails = require('./helpers/groqAiHelper').getAlbumDetails;
@@ -17,7 +18,7 @@ const readTagsForFiles = async (files) => {
     for (const file of files) {
         try {
             const tags = await readTags(file);
-            results.push({ file, tags });
+            results.push(tags);
         } catch (error) {
             console.error('Error reading tags for file:', file, error);
         }
@@ -28,8 +29,11 @@ const readTagsForFiles = async (files) => {
 
 // sample usage
 (async () => {
-    // const dir = '/app/music/Collection/M2M/Shades Of Purple';
-    const dir = '/app/music/Collection/M2M/';
+    await connectDB();
+
+    return;
+    // const dir = '/music/Collection/M2M/Shades Of Purple';
+    const dir = '/music/Collection/M2M/';
     try {
         const audioFolders = await findLeafAudioFolders(dir);
         console.log('Found audio folders:', audioFolders);
@@ -38,17 +42,19 @@ const readTagsForFiles = async (files) => {
         for (const singleFolder of audioFolders) {
             const tagsResults = await readTagsForFiles(singleFolder);
             // console.log('Tags results:', JSON.parse(JSON.stringify(tagsResults)));
+            console.log('Tags results:', tagsResults.slice(0, 2));
             // console.log("Second File", tagsResults[1]);
             // console.log("Second File Comment", tagsResults[1].tags.comment);
 
-            const enrichedMusicDetails = await getAlbumDetails(singleFolder);
-            // const enrichedMusicDetails = await getAlbumDetails(audioFiles.slice(0, 2));
-            // console.log('Enriched Music Details:', enrichedMusicDetails);
+            // const enrichedMusicDetails = await getAlbumDetails(singleFolder);
+            const enrichedMusicDetails = await getAlbumDetails(singleFolder.slice(0, 2));
+            console.log('Enriched Music Details:', enrichedMusicDetails);
 
             // print tag results length
             console.log('Tags results length:', tagsResults.length);
             // print enriched music details length
             console.log('Enriched Music Details length:', enrichedMusicDetails.metadata.length);
+            break;
         }
     } catch (error) {
         console.error('Error scanning directory:', error);

@@ -26,6 +26,7 @@ async function readMetadata(filePath) {
 
         // Return clean, predictable object (alphabetically sorted)
         return {
+            file: filePath,
             album: safe(common.album, ''),
             albumArtist: safe(common.albumartist, ''),
             artists: artists.filter(Boolean),
@@ -34,7 +35,7 @@ async function readMetadata(filePath) {
             diskNumber: safe(common.disk?.no, null),
             genres: genres.filter(Boolean),
             labels: labels.filter(Boolean),
-            picture: pictureBase64,
+            // picture: pictureBase64,
             title: safe(common.title, ''),
             totalDisks: safe(common.disk?.of, null),
             totalTracks: safe(common.track?.of, null),
