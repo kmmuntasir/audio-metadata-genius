@@ -42,19 +42,54 @@ const readTagsForFiles = async (files) => {
         // iterate over each folder and read tags
         for (const singleFolder of audioFolders) {
             const tagsResults = await readTagsForFiles(singleFolder);
-            console.log('Tags results:', tagsResults);
-            // console.log('Tags results:', tagsResults.slice(0, 2));
+            // console.log('Tags results:', tagsResults);
 
-            // const enrichedMusicDetails = await getAlbumDetails(singleFolder);
+
             const enrichedMusicDetails = await getAlbumDetails(singleFolder, true);
-            // const enrichedMusicDetails = await getAlbumDetails(singleFolder.slice(0, 2), true);
-            console.log('Enriched Music Details:', enrichedMusicDetails);
+            // console.log('Enriched Music Details:', enrichedMusicDetails);
 
-            // print tag results length
-            console.log('Tags results length:', tagsResults.length);
-            // print enriched music details length
-            console.log('Enriched Music Details length:', enrichedMusicDetails.metadata.length);
-            break;
+            let output = [];
+
+            if (tagsResults.length === enrichedMusicDetails.metadata.length) {
+                for (let i = 0; i < singleFolder.length; i++) {
+                    const filePath = singleFolder[i];
+                    const matchingTagResult = tagsResults.find(tagResult => tagResult.file === filePath);
+                    const matchingAiResult = enrichedMusicDetails.metadata.find(aiResult => aiResult.file === filePath);
+
+                    if (matchingTagResult && matchingAiResult) {
+                        output.push({
+                            filePath: filePath,
+                            existingMetadata: matchingTagResult,
+                            aiGenMetadata: matchingAiResult,
+                        });
+                    } else {
+                        console.warn(`Skipping file: ${filePath}.  No matching metadata found.`);
+                        // Even if a file is skipped, you might want to include it with empty metadata:
+                        output.push({
+                            filePath: filePath,
+                            existingMetadata: matchingTagResult || {},
+                            aiGenMetadata: matchingAiResult || {},
+                        });
+                    }
+                }
+            } else {
+                console.error(
+                    "Error: tagsResults and enrichedMusicDetails.metadata have different lengths.",
+                    "tagsResults length:",
+                    tagsResults.length,
+                    "enrichedMusicDetails length:",
+                    enrichedMusicDetails.metadata.length
+                );
+                //  Handle the error,  For example, return an empty array, or return only the file paths
+                //  with empty metadata.  The current code will skip adding any data if the lengths don't match.
+                output = singleFolder.map(filePath => ({
+                    filePath: filePath,
+                    existingMetadata: {},
+                    aiGenMetadata: {},
+                }));
+            }
+            console.log("Final Output:", output);
+            break; // Stop after processing the first folder for this example
         }
     } catch (error) {
         console.error('Error scanning directory:', error);
