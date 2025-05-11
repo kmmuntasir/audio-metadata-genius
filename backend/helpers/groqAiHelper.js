@@ -1,4 +1,6 @@
-const {Groq} = require('groq-sdk');
+const { Groq } = require('groq-sdk');
+const fs = require('fs');
+const path = require('path'); // Import the path module
 
 const client = new Groq();
 
@@ -37,13 +39,20 @@ The response must:
 IMPORTANT: Do not include any explanatory text, markdown formatting, or code blocks.
 `;
 
-const getAlbumDetails = async (fileNameList) => {
+const getAlbumDetails = async (fileNameList, testMode = false) => {
     const userContent = `
 File names:
 ${fileNameList.map(file => `- ${file}`).join('\n')}
 `.trim();
 
     console.log('\nSending file names to Groq AI for enrichment...');
+
+    if (testMode) {
+        console.log("Test mode is ON. Returning static response.");
+        // return JSON.parse(fs.readFileSync('./log/groqResponse-2025-05-11-11-07-23.json', 'utf-8'));
+        return JSON.parse(fs.readFileSync('./log/groqResponse-2025-05-11-11-11-45.json', 'utf-8'));
+    }
+
 
     try {
         const completion = await client.chat.completions.create({
@@ -62,8 +71,27 @@ ${fileNameList.map(file => `- ${file}`).join('\n')}
             throw new Error("Empty response from Groq AI");
         }
 
-        return JSON.parse(responseText);
-        // return responseText;
+        const response = JSON.parse(responseText);
+
+        // Generate timestamped filename
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+        const day = String(now.getDate()).padStart(2, '0');
+        const hour = String(now.getHours()).padStart(2, '0');
+        const minute = String(now.getMinutes()).padStart(2, '0');
+        const second = String(now.getSeconds()).padStart(2, '0');
+        const timestamp = `${year}-${month}-${day}-${hour}-${minute}-${second}`;
+        const logFileName = `./log/groqResponse-${timestamp}.json`;
+        const logDir = path.dirname(logFileName); // Get the directory path
+
+        // Create the directory if it doesn't exist
+        if (!fs.existsSync(logDir)) {
+            fs.mkdirSync(logDir, { recursive: true }); // Use recursive to create nested directories
+        }
+
+        fs.writeFileSync(logFileName, JSON.stringify(response, null, 2)); // Use the new filename
+        return response;
 
     } catch (err) {
         console.error("Failed to parse AI response as JSON:", err);
@@ -71,4 +99,4 @@ ${fileNameList.map(file => `- ${file}`).join('\n')}
     }
 };
 
-module.exports = {getAlbumDetails};
+module.exports = { getAlbumDetails };

@@ -1,0 +1,53 @@
+{
+  "albumName": "Shades Of Purple",
+  "metadata": [
+    {
+      "file": "/music/Collection/M2M/Shades Of Purple/01 Don‘t Say You Love Me.mp3",
+      "album": "Shades Of Purple",
+      "albumArtist": "M2M",
+      "artists": [
+        "M2M"
+      ],
+      "composers": [
+        "M2M"
+      ],
+      "description": "Don't Say You Love Me is a song by the Norwegian pop duo M2M.",
+      "diskNumber": 1,
+      "genres": [
+        "Pop"
+      ],
+      "labels": [
+        " Virgin, Polydor"
+      ],
+      "title": "Don‘t Say You Love Me",
+      "totalDisks": 1,
+      "totalTracks": 11,
+      "trackNumber": 1,
+      "year": 2000
+    },
+    {
+      "file": "/music/Collection/M2M/Shades Of Purple/02 The Day You Went Away.mp3",
+      "album": "Shades Of Purple",
+      "albumArtist": "M2M",
+      "artists": [
+        "M2M"
+      ],
+      "composers": [
+        "M2M"
+      ],
+      "description": "The Day You Went Away is a song by the Norwegian pop duo M2M, released in 1999.",
+      "diskNumber": 1,
+      "genres": [
+        "Pop"
+      ],
+      "labels": [
+        " Virgin, Polydor"
+      ],
+      "title": "The Day You Went Away",
+      "totalDisks": 1,
+      "totalTracks": 11,
+      "trackNumber": 2,
+      "year": 1999
+    }
+  ]
+}

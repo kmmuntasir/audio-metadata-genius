@@ -1,4 +1,4 @@
-const connectDB = require("./db/connection");
+const dbConnection = require("./db/connection");
 const findLeafAudioFolders = require('./services/scanner').findLeafAudioFolders;
 const tagReader = require('./services/tagReader').readMetadata;
 const getAlbumDetails = require('./helpers/groqAiHelper').getAlbumDetails;
@@ -29,9 +29,10 @@ const readTagsForFiles = async (files) => {
 
 // sample usage
 (async () => {
-    await connectDB();
+    // await connectDB();
 
-    return;
+    // return;
+
     // const dir = '/music/Collection/M2M/Shades Of Purple';
     const dir = '/music/Collection/M2M/';
     try {
@@ -41,13 +42,12 @@ const readTagsForFiles = async (files) => {
         // iterate over each folder and read tags
         for (const singleFolder of audioFolders) {
             const tagsResults = await readTagsForFiles(singleFolder);
-            // console.log('Tags results:', JSON.parse(JSON.stringify(tagsResults)));
-            console.log('Tags results:', tagsResults.slice(0, 2));
-            // console.log("Second File", tagsResults[1]);
-            // console.log("Second File Comment", tagsResults[1].tags.comment);
+            console.log('Tags results:', tagsResults);
+            // console.log('Tags results:', tagsResults.slice(0, 2));
 
             // const enrichedMusicDetails = await getAlbumDetails(singleFolder);
-            const enrichedMusicDetails = await getAlbumDetails(singleFolder.slice(0, 2));
+            const enrichedMusicDetails = await getAlbumDetails(singleFolder, true);
+            // const enrichedMusicDetails = await getAlbumDetails(singleFolder.slice(0, 2), true);
             console.log('Enriched Music Details:', enrichedMusicDetails);
 
             // print tag results length
