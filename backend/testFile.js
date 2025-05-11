@@ -1,7 +1,9 @@
-const dbConnection = require("./db/connection");
 const findLeafAudioFolders = require('./services/scanner').findLeafAudioFolders;
 const tagReader = require('./services/tagReader').readMetadata;
 const getAlbumDetails = require('./helpers/groqAiHelper').getAlbumDetails;
+const musicRepository = require('./repository/musicRepository'); // Import the music repository
+const fs = require('fs').promises;
+
 
 const readTags = async (filePath) => {
     try {
@@ -29,69 +31,68 @@ const readTagsForFiles = async (files) => {
 
 // sample usage
 (async () => {
-    // await connectDB();
-
-    // return;
-
-    // const dir = '/music/Collection/M2M/Shades Of Purple';
-    const dir = '/music/Collection/M2M/';
     try {
-        const audioFolders = await findLeafAudioFolders(dir);
-        console.log('Found audio folders:', audioFolders);
+        const dir = '/music/Collection/M2M/';
+        try {
+            const audioFolders = await findLeafAudioFolders(dir);
+            console.log('Found audio folders:', audioFolders);
 
-        // iterate over each folder and read tags
-        for (const singleFolder of audioFolders) {
-            const tagsResults = await readTagsForFiles(singleFolder);
-            // console.log('Tags results:', tagsResults);
+            // iterate over each folder and read tags
+            for (const singleFolder of audioFolders) {
+                const tagsResults = await readTagsForFiles(singleFolder);
+                // console.log('Tags results:', tagsResults);
 
 
-            const enrichedMusicDetails = await getAlbumDetails(singleFolder, true);
-            // console.log('Enriched Music Details:', enrichedMusicDetails);
+                const enrichedMusicDetails = await getAlbumDetails(singleFolder);
+                // console.log('Enriched Music Details:', enrichedMusicDetails);
 
-            let output = [];
+                let albumFolder = []; // Declare output using let, in case it needs to be re-assigned
 
-            if (tagsResults.length === enrichedMusicDetails.metadata.length) {
-                for (let i = 0; i < singleFolder.length; i++) {
-                    const filePath = singleFolder[i];
-                    const matchingTagResult = tagsResults.find(tagResult => tagResult.file === filePath);
-                    const matchingAiResult = enrichedMusicDetails.metadata.find(aiResult => aiResult.file === filePath);
+                if (tagsResults.length === enrichedMusicDetails.metadata.length) {
+                    albumFolder = singleFolder.map((filePath, index) => { // Assign the result of map to output
+                        const matchingTagResult = tagsResults.find(tagResult => tagResult.file === filePath);
+                        const matchingAiResult = enrichedMusicDetails.metadata.find(aiResult => aiResult.file === filePath);
 
-                    if (matchingTagResult && matchingAiResult) {
-                        output.push({
+                        const cleanedTagResult = matchingTagResult ? { ...matchingTagResult } : {};
+                        const cleanedAiResult = matchingAiResult ? { ...matchingAiResult } : {};
+                        delete cleanedTagResult.file;
+                        delete cleanedAiResult.file;
+
+                        return {
                             filePath: filePath,
-                            existingMetadata: matchingTagResult,
-                            aiGenMetadata: matchingAiResult,
-                        });
-                    } else {
-                        console.warn(`Skipping file: ${filePath}.  No matching metadata found.`);
-                        // Even if a file is skipped, you might want to include it with empty metadata:
-                        output.push({
-                            filePath: filePath,
-                            existingMetadata: matchingTagResult || {},
-                            aiGenMetadata: matchingAiResult || {},
-                        });
-                    }
+                            existingMetadata: cleanedTagResult || {},
+                            aiGenMetadata: cleanedAiResult || {},
+                        };
+                    });
+                } else {
+                    console.error(
+                        "Error: tagsResults and enrichedMusicDetails.metadata have different lengths.",
+                        "tagsResults length:",
+                        tagsResults.length,
+                        "enrichedMusicDetails length:",
+                        enrichedMusicDetails.metadata.length
+                    );
+                    albumFolder = singleFolder.map(filePath => ({  // Assign the result of map to output
+                        filePath: filePath,
+                        existingMetadata: {},
+                        aiGenMetadata: {},
+                    }));
                 }
-            } else {
-                console.error(
-                    "Error: tagsResults and enrichedMusicDetails.metadata have different lengths.",
-                    "tagsResults length:",
-                    tagsResults.length,
-                    "enrichedMusicDetails length:",
-                    enrichedMusicDetails.metadata.length
-                );
-                //  Handle the error,  For example, return an empty array, or return only the file paths
-                //  with empty metadata.  The current code will skip adding any data if the lengths don't match.
-                output = singleFolder.map(filePath => ({
-                    filePath: filePath,
-                    existingMetadata: {},
-                    aiGenMetadata: {},
-                }));
+                console.log("Final Output:", albumFolder);
+                // Insert the albumFolder data into the database using the repository
+                try {
+                    const insertResult = await musicRepository.insertMany(albumFolder);
+                    console.log("✅ Data inserted into database:", insertResult);
+                } catch (dbError) {
+                    console.error("❌ Error inserting data into database:", dbError);
+                }
+
+                // break; // Stop after processing the first folder for this example
             }
-            console.log("Final Output:", output);
-            break; // Stop after processing the first folder for this example
+        } catch (error) {
+            console.error('Error scanning directory:', error);
         }
     } catch (error) {
-        console.error('Error scanning directory:', error);
+        console.error('Error during application operations', error);
     }
 })();

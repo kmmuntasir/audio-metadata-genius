@@ -1,0 +1,214 @@
+{
+  "albumName": "The Big Room",
+  "metadata": [
+    {
+      "file": "/music/Collection/M2M/The Big Room/01 - Everything.mp3",
+      "album": "The Big Room",
+      "albumArtist": "M2M",
+      "artists": [
+        "Marit Larsen",
+        "Marianne Sveen"
+      ],
+      "composers": [],
+      "description": "Everything",
+      "diskNumber": 1,
+      "genres": [],
+      "labels": [],
+      "title": "Everything",
+      "totalDisks": 1,
+      "totalTracks": 11,
+      "trackNumber": 1,
+      "year": null
+    },
+    {
+      "file": "/music/Collection/M2M/The Big Room/02 - Jennifer.mp3",
+      "album": "The Big Room",
+      "albumArtist": "M2M",
+      "artists": [
+        "Marit Larsen",
+        "Marianne Sveen"
+      ],
+      "composers": [],
+      "description": "",
+      "diskNumber": 1,
+      "genres": [],
+      "labels": [],
+      "title": "Jennifer",
+      "totalDisks": 1,
+      "totalTracks": 11,
+      "trackNumber": 2,
+      "year": null
+    },
+    {
+      "file": "/music/Collection/M2M/The Big Room/03 - Don't.mp3",
+      "album": "The Big Room",
+      "albumArtist": "M2M",
+      "artists": [
+        "Marit Larsen",
+        "Marianne Sveen"
+      ],
+      "composers": [],
+      "description": "",
+      "diskNumber": 1,
+      "genres": [],
+      "labels": [],
+      "title": "Don't",
+      "totalDisks": 1,
+      "totalTracks": 11,
+      "trackNumber": 3,
+      "year": null
+    },
+    {
+      "file": "/music/Collection/M2M/The Big Room/04 - Payphone.mp3",
+      "album": "The Big Room",
+      "albumArtist": "M2M",
+      "artists": [
+        "Marit Larsen",
+        "Marianne Sveen"
+      ],
+      "composers": [],
+      "description": "",
+      "diskNumber": 1,
+      "genres": [],
+      "labels": [],
+      "title": "Payphone",
+      "totalDisks": 1,
+      "totalTracks": 11,
+      "trackNumber": 4,
+      "year": null
+    },
+    {
+      "file": "/music/Collection/M2M/The Big Room/05 - What You Do About Me.mp3",
+      "album": "The Big Room",
+      "albumArtist": "M2M",
+      "artists": [
+        "Marit Larsen",
+        "Marianne Sveen"
+      ],
+      "composers": [],
+      "description": "",
+      "diskNumber": 1,
+      "genres": [],
+      "labels": [],
+      "title": "What You Do About Me",
+      "totalDisks": 1,
+      "totalTracks": 11,
+      "trackNumber": 5,
+      "year": null
+    },
+    {
+      "file": "/music/Collection/M2M/The Big Room/06 - Love Left For Me.mp3",
+      "album": "The Big Room",
+      "albumArtist": "M2M",
+      "artists": [
+        "Marit Larsen",
+        "Marianne Sveen"
+      ],
+      "composers": [],
+      "description": "",
+      "diskNumber": 1,
+      "genres": [],
+      "labels": [],
+      "title": "Love Left For Me",
+      "totalDisks": 1,
+      "totalTracks": 11,
+      "trackNumber": 6,
+      "year": null
+    },
+    {
+      "file": "/music/Collection/M2M/The Big Room/07 - Miss Popular.mp3",
+      "album": "The Big Room",
+      "albumArtist": "M2M",
+      "artists": [
+        "Marit Larsen",
+        "Marianne Sveen"
+      ],
+      "composers": [],
+      "description": "",
+      "diskNumber": 1,
+      "genres": [],
+      "labels": [],
+      "title": "Miss Popular",
+      "totalDisks": 1,
+      "totalTracks": 11,
+      "trackNumber": 7,
+      "year": null
+    },
+    {
+      "file": "/music/Collection/M2M/The Big Room/08 - Wanna Be Where You Are.mp3",
+      "album": "The Big Room",
+      "albumArtist": "M2M",
+      "artists": [
+        "Marit Larsen",
+        "Marianne Sveen"
+      ],
+      "composers": [],
+      "description": "",
+      "diskNumber": 1,
+      "genres": [],
+      "labels": [],
+      "title": "Wanna Be Where You Are",
+      "totalDisks": 1,
+      "totalTracks": 11,
+      "trackNumber": 8,
+      "year": null
+    },
+    {
+      "file": "/music/Collection/M2M/The Big Room/09 - Leave Me Alone.mp3",
+      "album": "The Big Room",
+      "albumArtist": "M2M",
+      "artists": [
+        "Marit Larsen",
+        "Marianne Sveen"
+      ],
+      "composers": [],
+      "description": "",
+      "diskNumber": 1,
+      "genres": [],
+      "labels": [],
+      "title": "Leave Me Alone",
+      "totalDisks": 1,
+      "totalTracks": 11,
+      "trackNumber": 9,
+      "year": null
+    },
+    {
+      "file": "/music/Collection/M2M/The Big Room/10 - Sometimes.mp3",
+      "album": "The Big Room",
+      "albumArtist": "M2M",
+      "artists": [
+        "Marit Larsen",
+        "Marianne Sveen"
+      ],
+      "composers": [],
+      "description": "",
+      "diskNumber": 1,
+      "genres": [],
+      "labels": [],
+      "title": "Sometimes",
+      "totalDisks": 1,
+      "totalTracks": 11,
+      "trackNumber": 10,
+      "year": null
+    },
+    {
+      "file": "/music/Collection/M2M/The Big Room/11 - Eventually.mp3",
+      "album": "The Big Room",
+      "albumArtist": "M2M",
+      "artists": [
+        "Marit Larsen",
+        "Marianne Sveen"
+      ],
+      "composers": [],
+      "description": "",
+      "diskNumber": 1,
+      "genres": [],
+      "labels": [],
+      "title": "Eventually",
+      "totalDisks": 1,
+      "totalTracks": 11,
+      "trackNumber": 11,
+      "year": null
+    }
+  ]
+}
